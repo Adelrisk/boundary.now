@@ -30,10 +30,12 @@ export default class AppComponent {
   private completeResults: Array<any>;
   private placeName: string;
   private selectedIndex: number;
+  private hasMore: boolean;
 
   constructor(private http: Http, private mapService: MapService, private conversionService: ConversionService, private dialog: MdDialog) {
     this.isGeocoding = false;
     this.noResult = false;
+    this.hasMore = false;
     this.results = [];
     this.completeResults = [];
     this.expecteExclude = false;
@@ -75,13 +77,17 @@ export default class AppComponent {
 
           this.completeResults = this.completeResults.concat(results);
 
+          const previousSize = this.results.length;
+
           this.results = this.completeResults.filter(result => {
             return result.osm_type === 'relation' && result.type === 'administrative';
           });
 
-          this.noResult = this.results.length === 0;
+          this.noResult = (this.results.length - previousSize) <= 0;
+          this.hasMore = !this.noResult;
         }, () => {
           this.noResult = true;
+          this.hasMore = false;
         });
   }
 
@@ -92,6 +98,7 @@ export default class AppComponent {
 
   clear() {
     this.noResult = false;
+    this.hasMore = false;
     this.results = [];
     this.completeResults = [];
     this.placeName = '';

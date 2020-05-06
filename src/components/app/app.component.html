@@ -37,7 +37,7 @@
       </button>
       <button md-button
               class="search-button"
-              [disabled]="results.length == 0 || isGeocoding"
+              [disabled]="!hasMore || isGeocoding"
               md-tooltip="Search more"
               (click)="more()">
         <i class="fa fa-search-plus"></i>
