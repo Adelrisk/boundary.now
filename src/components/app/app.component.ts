@@ -76,7 +76,7 @@ export default class AppComponent {
           this.completeResults = this.completeResults.concat(results);
 
           this.results = this.completeResults.filter(result => {
-            return result.osm_type === 'relation';
+            return result.osm_type === 'relation' && result.type === 'administrative';
           });
 
           this.noResult = this.results.length === 0;
