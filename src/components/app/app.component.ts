@@ -25,7 +25,9 @@ import ConversionService from '../../services/conversion.service';
 export default class AppComponent {
   private isGeocoding: boolean;
   private noResult: boolean;
+  private expecteExclude: boolean;
   private results: Array<any>;
+  private completeResults: Array<any>;
   private placeName: string;
   private selectedIndex: number;
 
@@ -33,6 +35,8 @@ export default class AppComponent {
     this.isGeocoding = false;
     this.noResult = false;
     this.results = [];
+    this.completeResults = [];
+    this.expecteExclude = false;
   }
 
   ngOnInit() {
@@ -41,6 +45,8 @@ export default class AppComponent {
 
   search() {
     if (!this.placeName) {
+
+      this.expecteExclude = false;
       return;
     }
 
@@ -48,16 +54,28 @@ export default class AppComponent {
     this.noResult = false;
     this.selectedIndex = undefined;
     this.mapService.clear();
-    this.results = [];
+
+    let arrStr;
+    if (this.expecteExclude) {
+      arrStr = '&exclude_place_ids=' + encodeURIComponent(JSON.stringify(this.completeResults.map(poi => poi.place_id)));
+    } else {
+      arrStr = '';
+      this.completeResults = [];
+      this.results = [];
+    }
+    this.expecteExclude = false;
 
     this.http
-        .get(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(this.placeName)}&format=json&limit=10&polygon_geojson=1`)
+        .get(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(this.placeName)}&format=json&limit=10&polygon_geojson=1` + arrStr)
         .map(res => res.json())
         .finally(() => {
           this.isGeocoding = false;
         })
         .subscribe(results => {
-          this.results = results.filter(result => {
+
+          this.completeResults = this.completeResults.concat(results);
+
+          this.results = this.completeResults.filter(result => {
             return result.osm_type === 'relation';
           });
 
@@ -67,9 +85,15 @@ export default class AppComponent {
         });
   }
 
+  more() {
+    this.expecteExclude = true;
+    this.search();
+  }
+
   clear() {
     this.noResult = false;
     this.results = [];
+    this.completeResults = [];
     this.placeName = '';
     this.selectedIndex = undefined;
     this.mapService.clear();

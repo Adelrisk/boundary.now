@@ -35,6 +35,13 @@
               (click)="clear()">
         <i class="fa fa-remove"></i>
       </button>
+      <button md-button
+              class="search-button"
+              [disabled]="results.length == 0 || isGeocoding"
+              md-tooltip="Search more"
+              (click)="more()">
+        <i class="fa fa-search-plus"></i>
+      </button>
     </md-card>
     <md-card *ngFor="let result of results; let i = index"
              class="search-result"
