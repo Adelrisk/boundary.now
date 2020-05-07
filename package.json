@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/haoliangyu/boundary.now.git"
+    "url": "git+https://github.com/adelrisk/boundary.now.git"
   },
-  "author": "Haoliang Yu <haholiang.yu@outlook.com>",
+  "author": "Adelrisk <8825136+Adelrisk@users.noreply.github.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/haoliangyu/boundary.now/issues"
+    "url": "https://github.com/adelrisk/boundary.now/issues"
   },
-  "homepage": "https://github.com/haoliangyu/boundary.now#readme",
+  "homepage": "https://github.com/adelrisk/boundary.now#readme",
   "devDependencies": {
     "@types/chai": "^3.4.34",
     "@types/mocha": "^2.2.39",
